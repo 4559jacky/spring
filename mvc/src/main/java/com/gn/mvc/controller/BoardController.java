@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.BoardDto;
+import com.gn.mvc.dto.SearchDto;
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.service.BoardService;
 
@@ -76,11 +77,12 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board")
-	public String  selectBoardAll(Model model) {
+	public String  selectBoardAll(Model model, SearchDto searchDto) {
 		// 1. DB에서 목록 SELECT
-		List<Board> resultList = service.selectBoardAll();
+		List<Board> resultList = service.selectBoardAll(searchDto);
 		// 2. 목록 Model에 등록
 		model.addAttribute("boardList",resultList);
+		model.addAttribute("searchDto",searchDto);
 		// 3. list.html에 데이터 셋팅
 		return "board/list";
 	}
