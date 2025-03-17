@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 	
-	private Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private Logger logger = LoggerFactory.getLogger(BoardController.class); 
 	
 	// 1. 필드 주입 -> 순환 참조
 //	@Autowired
