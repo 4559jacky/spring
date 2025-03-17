@@ -47,7 +47,7 @@ public class Board {
 	
 	@ManyToOne
 	@JoinColumn(name="board_writer")
-	private Member member; 
+	private Member member;
 	
 	
 }
