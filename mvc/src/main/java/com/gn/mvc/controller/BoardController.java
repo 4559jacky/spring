@@ -149,7 +149,7 @@ public class BoardController {
 			resultMap.put("res_code", "200");
 			resultMap.put("res_msg", "성공적으로 삭제되었습니다.");
 		}
-		return resultMap;
+		return resultMap; 
 	}
 	
 }
