@@ -37,6 +37,11 @@ class BoardServiceTest {
 		assertEquals(expected, real);
 	}
 	
+	@Test
+	void testCreateBoardOne_success() {
+		
+	}
+	
 	
 
 }

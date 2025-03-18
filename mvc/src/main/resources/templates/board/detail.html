@@ -12,9 +12,16 @@ layout:decorate="~{/include/layout}">
 				<div class="board_detail">
 					<ul>
 						<li>
-							<img src="">
-							<br>
-							<span></span>
+							<th:block th:if="${!#lists.isEmpty(attachList)}">
+								<img th:src="|/uploads/board/${attachList[0].newName}|">
+								<br>
+								<span th:text="${attachList[0].oriName}">대표 이미지 명칭</span>
+							</th:block>
+							<th:block th:if="${#lists.isEmpty(attachList)}">
+								<img src="/img/lumodiem_logo.png">
+								<br>
+								<span>대표 이미지 명칭</span>
+							</th:block>
 						</li>
 						<li>
 							<table>
@@ -37,6 +44,17 @@ layout:decorate="~{/include/layout}">
 								<tr>
 									<td>수정일</td>
 									<td th:text="${#temporals.format(board.modDate, 'yyyy-MM-dd HH:mm')}">수정일</td>
+								</tr>
+								<tr>
+									<td>파일목록</td>
+									<td>
+										<div th:if="${!#lists.isEmpty(attachList)}"
+											th:each="attach : ${attachList}">
+											<!-- {id}옆에 괄호()를 쓰면 {id}에 들어갈 값을 지정해줄 수 있다. -->
+											<a th:onclick="|location.href='@{/download/{id}(id=${attach.attachNo})}'|"
+											th:text="${attach.oriName}">파일명</a>
+										</div>
+									</td>
 								</tr>
 							</table>
 						</li>
