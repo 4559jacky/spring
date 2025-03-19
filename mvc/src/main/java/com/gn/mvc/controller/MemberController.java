@@ -20,13 +20,13 @@ public class MemberController {
 	
 	private final MemberService service; //값이 1회성 -> 순환참조 발생 ㄴ ㄴ 
 
-	@GetMapping("/member/create")
+	@GetMapping("/signup")
 	public String CreateMemberViews() {
 	System.out.println("회원가입 화면전환 ");
 		return "member/create";
 	}
 	
-	@PostMapping("/member")
+	@PostMapping("/signup")
 	@ResponseBody
 	public Map<String,String> createMemberApi(MemberDto dto) {
 		Map<String,String> resultMap = new HashMap<String,String>();
@@ -40,6 +40,11 @@ public class MemberController {
 			resultMap.put("res_msg", "회원가입을 성공했습니다.");
 		}
 		return resultMap;
+	}
+	
+	@GetMapping("/login")
+	public String loginView() {
+		return "member/login";
 	}
 
 }
