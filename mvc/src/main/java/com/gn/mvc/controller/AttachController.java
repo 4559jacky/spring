@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.gn.mvc.entity.Attach;
 import com.gn.mvc.service.AttachService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -50,6 +51,21 @@ public class AttachController {
 			e.printStackTrace();
 			// 400 에러 발생
 			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	private String getEncodedFileName(String fileName, HttpServletRequest request) {
+		String userAgent = request.getHeader("User-Agent");
+		try {
+			if(userAgent.contains("MSIE") || userAgent.contains("Trident") || userAgent.contains("Edge")) {
+				return URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+						.replaceAll("\\+", "%20");
+			} else {
+				return URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+			}
+			
+		} catch(Exception e) {
+			return fileName;
 		}
 	}
 }
