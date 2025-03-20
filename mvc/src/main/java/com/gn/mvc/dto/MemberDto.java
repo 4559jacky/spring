@@ -47,4 +47,5 @@ public class MemberDto {
 				.mod_date(member.getModDate())
 				.build();
 	}
+	
 }
