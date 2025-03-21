@@ -42,6 +42,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(requests -> requests
 				// 허용된 사람이든 허용안된 사람이든 가능하게 해줌(로그인 회원가입 로그아웃)
 				.requestMatchers("/login","/signup","/logout", "/").permitAll()
+				.requestMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated())
 			.formLogin(login -> login.loginPage("/login")
 									.successHandler(new MyLoginSuccessHandler())
