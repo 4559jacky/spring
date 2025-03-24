@@ -59,7 +59,7 @@ layout:decorate="~{/include/layout}">
 		<br>
 	    <textarea id="msgContent" placeholder="메시지 입력"></textarea>
 	    <br>
-	    <button onclick="sendMsg();">전송</button>
+	    <button id="send_btn" onclick="sendMsg();">전송</button>
 	    <div id="chatBox">
 	    </div>
     </div>
@@ -70,6 +70,11 @@ layout:decorate="~{/include/layout}">
 	    // let socket = new WebSocket("ws://localhost:8080/ws/chat?senderNo="+senderNo);
 	    // 연결 시점에 채팅방 정보 전달
 	    let socket = new WebSocket("ws://localhost:8080/ws/chat?senderNo="+senderNo+"&roomNo="+roomNo);
+	    
+	    document.getElementById('send_btn').addEventHandler('keyup',function(){
+	    	
+	    })
+	    
 	    const sendMsg = function(){
 	    	// 채팅방, 받는 사람, 보내는 사람, 메시지
 	    	let receiverNo = document.getElementById("receiverNo").value;

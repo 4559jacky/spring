@@ -12,6 +12,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gn.mvc.dto.ChatMsgDto;
+import com.gn.mvc.entity.ChatMsg;
+import com.gn.mvc.entity.ChatRoom;
+import com.gn.mvc.entity.Member;
 import com.gn.mvc.repository.ChatMsgRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +55,20 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ChatMsgDto dto = objectMapper.readValue(message.getPayload(), ChatMsgDto.class);
 		
+		// 데이터베이스에 채팅 메세지 등록
+		// 1. dto -> entity
+		if(userSessions.containsKey(dto.getSender_no())) {
+			Member member = Member.builder().memberNo(dto.getSender_no()).build();
+			ChatRoom chatRoom = ChatRoom.builder().roomNo(dto.getRoom_no()).build();
+			ChatMsg entity = ChatMsg.builder()
+					.sendMember(member)
+					.chatRoom(chatRoom)
+					.msgContent(dto.getMsg_content())
+					.build();
+			// 2. entity -> save
+			ChatMsg result = chatMsgRepository.save(entity);
+		}
+		
 		WebSocketSession receiverSession
 			= userSessions.get(dto.getReceiver_no());
 		
@@ -72,7 +89,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 		if(senderSession != null && senderSession.isOpen()
 				&& senderRoom == dto.getRoom_no()) {
 //			senderSession.sendMessage(new TextMessage(dto.getMsg_content()));
-			
+			// 메시지 JSON 데이터 전달
 			senderSession.sendMessage(new TextMessage(message.getPayload()));
 		}
 		
