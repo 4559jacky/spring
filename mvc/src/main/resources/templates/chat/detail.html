@@ -60,8 +60,26 @@ layout:decorate="~{/include/layout}">
 	    <textarea id="msgContent" placeholder="메시지 입력"></textarea>
 	    <br>
 	    <button id="send_btn" onclick="sendMsg();">전송</button>
-	    <div id="chatBox">
-	    </div>
+	    <th:block th:if="${!#lists.isEmpty(msgList)}">
+	    	<div id="chatBox">
+	    		<th:block th:each="chatMsg : ${msgList}">
+			        <th:block th:if="${chatMsg.sendMember.memberNo == #authentication.principal.member.memberNo}">
+			            <div class="msg-box msg-right" th:text="${chatMsg.msgContent}">
+			            	메세지내용
+			            </div>
+			        </th:block>
+			        <th:block th:if="${chatMsg.sendMember.memberNo != #authentication.principal.member.memberNo}">
+			            <div class="msg-box msg-left" th:text="${chatMsg.msgContent}">
+			            	메세지내용
+			            </div>
+			        </th:block>
+		        </th:block>
+			</div>
+	    </th:block>
+	    <th:block th:if="${#lists.isEmpty(msgList)}">
+	    	<div id="chatBox">
+	    	</div>
+	    </th:block>
     </div>
     <script>
 	    let senderNo = document.getElementById("senderNo").value;
@@ -71,9 +89,18 @@ layout:decorate="~{/include/layout}">
 	    // 연결 시점에 채팅방 정보 전달
 	    let socket = new WebSocket("ws://localhost:8080/ws/chat?senderNo="+senderNo+"&roomNo="+roomNo);
 	    
-	    document.getElementById('send_btn').addEventHandler('keyup',function(){
-	    	
-	    })
+	    /* document.getElementById('send_btn').addEventListener('keyup',function(event){
+	    	if(event.code == 'Enter') {
+	    		// 채팅방, 받는 사람, 보내는 사람, 메시지
+		    	let receiverNo = document.getElementById("receiverNo").value;
+		    	let msgContent = document.getElementById("msgContent").value;
+		    	
+		    	socket.send(JSON.stringify({
+		    				sender_no : senderNo, room_no : roomNo, receiver_no : receiverNo, msg_content : msgContent
+		    	}));
+		    	document.getElementById("msgContent").value="";
+	    	}
+	    }) */
 	    
 	    const sendMsg = function(){
 	    	// 채팅방, 받는 사람, 보내는 사람, 메시지

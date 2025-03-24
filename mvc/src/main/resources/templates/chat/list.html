@@ -44,7 +44,7 @@ layout:decorate="~{/include/layout}">
 								상대방 : toMember
 							</td>
 							<td th:text="${chatRoom.lastMsg}">마지막 메시지</td>
-					    <td th:text="${#temporals.format(chatRoom.lastDate, 'yy-MM-dd')}">작성일시</td>
+					    <td th:text="${#temporals.format(chatRoom.lastDate, 'yy-MM-dd HH:mm')}">작성일시</td>
 						<tr>
 					</tbody>
 				</table>

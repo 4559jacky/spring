@@ -2,6 +2,7 @@ package com.gn.mvc.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +34,9 @@ public class ChatRoomService {
 		spec = spec.and(ChatRoomSpecification.fromMemberEquals(md.getMember()));
 		spec = spec.or(ChatRoomSpecification.toMemberEquals(md.getMember()));
 		
-		List<ChatRoom> list = repository.findAll(spec);
+		Sort sort = Sort.by(Sort.Direction.DESC, "lastDate");
+		
+		List<ChatRoom> list = repository.findAll(spec, sort);
 		return list;
 	}
 }

@@ -9,5 +9,4 @@ import com.gn.mvc.entity.Attach;
 
 public interface AttachRepository extends JpaRepository<Attach, Long> {
 	List<Attach> findAll(Specification<Attach> spec);
-	
 }
