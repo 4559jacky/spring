@@ -1,7 +1,7 @@
 package com.gn.mvc.dto;
 
-import groovy.transform.ToString;
-import groovy.transform.builder.Builder;
+import lombok.ToString;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
