@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ToDo List</title>
+</head>
+	<th:block>
+		<h1>할 일 목록</h1>
+		<form action="/todo" name="search_todo_form" method="get">
+			<div class="search">
+				<label>내용 : <input type="text" name="search_text"
+				th:value="${searchDto != null ? searchDto.search_text : ''}"></label>
+				<input type="submit" value="검색">
+			</div>
+		</form>
+		<br>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>완료</th>
+					<th>번호</th>
+					<th>내용</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${#lists.isEmpty(todoList)}">
+					<td colspan="4">조회된 데이터가 없습니다.</td>
+				</tr>
+				<tr th:if="${!#lists.isEmpty(todoList)}"
+					th:each="todo, todoStatus : ${todoList}">
+					<td>
+		                <input type="checkbox" th:checked="${todo.flag == 'Y'}"
+		                 th:value="${todo.no}" class="finish-check">
+		                완료
+		            </td>
+					<td th:text="${(pageDto.nowPage-1)*(pageDto.numPerPage)+todoStatus.count}">번호</td>
+					<td th:text="${todo.content}">내용</td>
+					<td><button type="button" th:value="${todo.no}" class="delete_btn">삭제</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="center">
+			<div class="pagination">
+				<th:block th:if="${pageDto.totalPage != 0}">
+					<a th:if="${pageDto.prev}"
+						 th:href="@{/todo(nowPage=${pageDto.pageBarStart-1},search_text=${searchDto.search_text})}">
+						 &laquo;
+					</a>
+					<a th:each="num : ${#numbers.sequence(pageDto.pageBarStart,pageDto.pageBarEnd)}"
+						th:text="|${num} |" class="page-link"
+						th:classappend="${pageDto.nowPage == num} ? 'active' "
+						th:href="@{/todo(nowPage=${num},search_text=${searchDto.search_text})}">
+						번호
+					</a>
+					<a th:if="${pageDto.next}"
+						th:href="@{/todo(nowPage=${pageDto.pageBarEnd+1},search_text=${searchDto.search_text})}">&raquo;</a>
+				</th:block>
+			</div>
+		</div>
+		
+		<br>
+		
+		
+		<h1>할 일 추가</h1>
+		<form name="todo_form">
+			<input type="text" name="content" id="todo" placeholder="할일을 입력하세요.">
+			<input type="hidden" name="flag" value="N">
+			<button type="button" id="createTodo">추가하기</button>
+		</form>
+		<script>
+			// 체크박스
+			document.querySelectorAll('.finish-check').forEach(function(checkbox) {
+		        checkbox.addEventListener('change', function() {
+		            const todoNo = this.value;
+		            const isChecked = this.checked ? 'Y' : 'N';
+	
+		            fetch("/todo/update/"+todoNo, {
+		                method: 'post'
+		            })
+		            .then(response => response.json())
+		            .then(data => {
+		            	if(data.res_code == '500') {
+		            		alert(data.res_msg);
+		            	}
+		            })
+		            .catch(error => {
+		                console.error('서버 요청 실패:', error);
+		            });
+		        });
+		    });
+			
+			// 삭제
+			document.querySelectorAll('.delete_btn').forEach(function(button) {
+				button.addEventListener('click', function() {
+					let todoNo = this.value;
+					if(confirm('할 일을 삭제하시겠습니까?')) {
+						fetch("/todo/"+todoNo,{
+							method:'delete'
+						})
+						.then(response => response.json())
+						.then(data =>{
+							alert(data.res_msg);
+							if(data.res_code == 200) {
+								location.href = '/';
+							}
+						})
+					} 
+				})
+			})
+		
+			// 할 일 추가 버튼 클릭 시
+			document.getElementById('createTodo').addEventListener('click',function(e){
+				const form = document.todo_form;
+				e.preventDefault();
+				console.log("클릭되나요?");
+				let valid = true;
+				let todo = document.getElementById('todo').value;
+				
+				if(!todo) {
+					valid = false;
+					console.log("값이 없는게 맞음?");
+				}
+				
+				if(valid == false) {
+					alert('할 일을 입력해주세요.');
+				} else {
+					const payload = new FormData(form);
+					console.log(payload);
+					fetch("/todo/create",{
+						method:'post',
+						body:payload
+					})
+					.then(response => response.json())
+					.then(data =>{
+						console.log(data);
+						alert(data.res_msg);
+						if(data.res_code == 200) {
+							location.href = '/';
+						}
+					})
+				}
+			})
+		</script>
+	</th:block>
+</html>
