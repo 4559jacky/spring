@@ -82,39 +82,74 @@ public class TodoController {
 		return resultMap;
 	}
 	
-	// 상태변경
-	@PostMapping("/todo/update/{id}")
+	// 상태변경 강사님 버전
+	@PostMapping("/todo/{id}/update")
 	@ResponseBody
-	public Map<String,String> updateTodoOne(@PathVariable("id") Long id) {
+	public Map<String,String> updateTodoApi(@PathVariable("id") Long id) {
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
-		resultMap.put("res_res", "상태 변경 실패");
+		resultMap.put("res_msg", "수정 실패");
 		
-		int result = todoService.updateTodoOne(id);
-		
-		if(result > 0) {
+		Todo result = todoService.updateTodo(id);
+		if(result != null) {
 			resultMap.put("res_code", "200");
-			resultMap.put("res_msg", "상태 변경 완료");
+			resultMap.put("res_msg", "수정 성공");
 		}
 		
 		return resultMap;
 	}
 	
-	@DeleteMapping("/todo/{id}")
+	// 삭제 강사님 버전
+	@PostMapping("/todo/{id}/delete")
 	@ResponseBody
-	public Map<String,String> deleteTodo(@PathVariable("id") Long id) {
-		Map<String, String> resultMap = new HashMap<String, String>();
+	public Map<String,String> deleteTodoApi(@PathVariable("id") Long id) {
+		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
-		resultMap.put("res_msg", "삭제에 실패하였습니다.");
+		resultMap.put("res_msg", "삭제 실패");
 		
-		int result = todoService.deleteTodo(id);
-
-		if (result > 0) {
+		int result = todoService.deleteTodoOne(id);
+		if(result > 0) {
 			resultMap.put("res_code", "200");
-			resultMap.put("res_msg", "성공적으로 삭제되었습니다.");
+			resultMap.put("res_msg", "삭제 성공");
 		}
-		return resultMap;
 		
+		return resultMap;
 	}
+	
+	
+	// 상태변경
+//	@PostMapping("/todo/update/{id}")
+//	@ResponseBody
+//	public Map<String,String> updateTodoOne(@PathVariable("id") Long id) {
+//		Map<String,String> resultMap = new HashMap<String,String>();
+//		resultMap.put("res_code", "500");
+//		resultMap.put("res_res", "상태 변경 실패");
+//		
+//		int result = todoService.updateTodoOne(id);
+//		
+//		if(result > 0) {
+//			resultMap.put("res_code", "200");
+//			resultMap.put("res_msg", "상태 변경 완료");
+//		}
+//		
+//		return resultMap;
+//	}
+	
+//	@DeleteMapping("/todo/{id}")
+//	@ResponseBody
+//	public Map<String,String> deleteTodo(@PathVariable("id") Long id) {
+//		Map<String, String> resultMap = new HashMap<String, String>();
+//		resultMap.put("res_code", "500");
+//		resultMap.put("res_msg", "삭제에 실패하였습니다.");
+//		
+//		int result = todoService.deleteTodo(id);
+//
+//		if (result > 0) {
+//			resultMap.put("res_code", "200");
+//			resultMap.put("res_msg", "성공적으로 삭제되었습니다.");
+//		}
+//		return resultMap;
+//		
+//	}
 	
 }

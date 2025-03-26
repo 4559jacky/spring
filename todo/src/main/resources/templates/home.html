@@ -29,14 +29,23 @@
 				</tr>
 				<tr th:if="${!#lists.isEmpty(todoList)}"
 					th:each="todo, todoStatus : ${todoList}">
-					<td>
+					<!-- <td>
 		                <input type="checkbox" th:checked="${todo.flag == 'Y'}"
 		                 th:value="${todo.no}" class="finish-check">
+		                완료
+		            </td> -->
+		            <td>
+		                <input type="checkbox"
+		                th:checked="${todo.flag == 'Y'}"
+		                th:value="${todo.flag}"
+		                th:onchange="|javascript:todoFlagUpdate('${todo.no}')|">
 		                완료
 		            </td>
 					<td th:text="${(pageDto.nowPage-1)*(pageDto.numPerPage)+todoStatus.count}">번호</td>
 					<td th:text="${todo.content}">내용</td>
-					<td><button type="button" th:value="${todo.no}" class="delete_btn">삭제</button></td>
+					<!-- <td><button type="button" th:value="${todo.no}" class="delete_btn">삭제</button></td> -->
+					<td><input type="button" value="삭제"
+						th:onclick="|javascript:todoDelete('${todo.no}')|"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -70,7 +79,7 @@
 		</form>
 		<script>
 			// 체크박스
-			document.querySelectorAll('.finish-check').forEach(function(checkbox) {
+			/* document.querySelectorAll('.finish-check').forEach(function(checkbox) {
 		        checkbox.addEventListener('change', function() {
 		            const todoNo = this.value;
 	
@@ -87,10 +96,33 @@
 		                console.error('서버 요청 실패:', error);
 		            });
 		        });
-		    });
+		    }); */
+		    const todoFlagUpdate = function(todoNo) {
+		    	fetch("/todo/"+todoNo+"/update",{
+		    		method:'post'
+		    	})
+		    	.then(response => response.json())
+		    	.then(data => {
+		    		console.log(data);
+		    	})
+		    }
+		    
+		    const todoDelete = function(todoNo) {
+		    	fetch("/todo/"+todoNo+"/delete",{
+		    		method:'post'
+		    	})
+		    	.then(response => response.json())
+		    	.then(data => {
+		    		alert(data.res_msg);
+		    		if(data.res_code = '200') {
+		    			location.href = '/';
+		    		}
+		    	})
+		    }
+		    
 			
 			// 삭제
-			document.querySelectorAll('.delete_btn').forEach(function(button) {
+			/* document.querySelectorAll('.delete_btn').forEach(function(button) {
 				button.addEventListener('click', function() {
 					let todoNo = this.value;
 					if(confirm('할 일을 삭제하시겠습니까?')) {
@@ -106,7 +138,7 @@
 						})
 					} 
 				})
-			})
+			}) */
 			
 			// 강사님 버전 할 일 추가
 			/* const todoCreateFrm = document.todo_form;

@@ -107,5 +107,37 @@ public class TodoService {
 		}
 		return result;
 	}
+
+	// 상태 변경 강사님버전
+	public Todo updateTodo(Long id) {
+		Todo target = todoRepository.findById(id).orElse(null);
+
+		TodoDto dto = new TodoDto().toDto(target);
+		
+		if(target != null) {
+			if("Y".equals(target.getFlag())) {
+				dto.setFlag("N");
+			} else {
+				dto.setFlag("Y");
+			}
+		}
+		return todoRepository.save(dto.toEntity());
+	}
+	
+	// 삭제 강사님 버전
+	public int deleteTodoOne(Long id) {
+		int result = 0;
+		try {
+			Todo target = todoRepository.findById(id).orElse(null);
+			if(target != null) {
+				todoRepository.delete(target);
+			}
+			result = 1;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 }
