@@ -21,15 +21,30 @@ public class TodoService {
 	
 	private final TodoRepository todoRepository;
 	
+	// 강사님 할 일 조회
+//	public List<Todo> selectTodoAll() {
+//		return todoRepository.findAll();
+//	}
+	
 	// 할 일 조회
 	public Page<Todo> selectTodoAll(SearchDto searchDto, PageDto pageDto) {
-		Pageable pageable = PageRequest.of(pageDto.getNowPage()-1, pageDto.getNumPerPage());
+		Pageable pageable 
+			= PageRequest.of(pageDto.getNowPage()-1, pageDto.getNumPerPage());
 		Specification<Todo> spec = (root,query,criteriaBuilder) -> null;
 		spec = spec.and(TodoSpecification.todoContentContains(searchDto.getSearch_text()));
-		System.out.println(searchDto.getSearch_text());
+//		if(searchDto.getSearch_text() == null) {
+//			spec = spec.and(TodoSpecification.todoContentContains(searchDto.getSearch_text()));
+//		}
 		Page<Todo> list = todoRepository.findAll(spec, pageable);
 		return list;
 	}
+	
+	// 강사님 할 일 추가
+//	public Todo createTodoOne(TodoDto dto) {
+//		Todo entity = dto.toEntity();
+//		Todo result = todoRepository.save(entity);
+//		return result;
+//	}
 	
 	// 할 일 추가
 	public int createTodo(TodoDto dto) {
@@ -59,20 +74,15 @@ public class TodoService {
 		try {
 			Todo entity = todoRepository.findById(id).orElse(null);
 			if(entity != null) {
-				System.out.println("여기걸림?");
 				TodoDto dto = new TodoDto().toDto(entity);
 				if(dto.getFlag().equals("Y")) {
-					System.out.println("여기걸리면 Y");
 					dto.setFlag("N");
 				} else if(dto.getFlag().equals("N")) {
-					System.out.println("여기걸리면 N");
 					dto.setFlag("Y");
 				}
-				System.out.println(dto);
 				
 				Todo param = dto.toEntity();
-				Todo last = todoRepository.save(param);
-				System.out.println(last);
+				todoRepository.save(param);
 				result = 1;
 			}
 			

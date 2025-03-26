@@ -30,23 +30,41 @@ public class TodoController {
 	public String selectTodoAll(Model model, SearchDto searchDto, PageDto pageDto) {
 		if (pageDto.getNowPage() == 0)
 			pageDto.setNowPage(1);
+		
 		if(searchDto.getSearch_text() == null) {
 			searchDto.setSearch_text("");
 		}
-		System.out.println("여긴 들어옴?");
+		
 		Page<Todo> resultList = todoService.selectTodoAll(searchDto, pageDto);
 		pageDto.setTotalPage(resultList.getTotalPages());
-		System.out.println(pageDto.getTotalPage());
-		if(resultList.isEmpty()) {
-			resultList = null;
-		}
 		
-		model.addAttribute("todoList", resultList);
+//		if(resultList.isEmpty()) {
+//			resultList = null;
+//		}
+		
+		model.addAttribute("todoList", resultList.getContent());
 		model.addAttribute("searchDto", searchDto);
 		model.addAttribute("pageDto", pageDto);
 		
 		return "home";
 	}
+	
+	// 강사님 버전 할 일 추가
+//	@PostMapping("/todo/create")
+//	@ResponseBody
+//	public Map<String,String> createTodoApi(TodoDto dto) {
+//		Map<String,String> resultMap = new HashMap<String,String>();
+//		resultMap.put("res_code","500");
+//		resultMap.put("res_msg", "할 일 추가 실패");
+//		
+//		Todo result = todoService.createTodoOne(dto);
+//		if(result != null) {
+//			resultMap.put("res_code", "200");
+//			resultMap.put("res_msg", "할 일이 추가되었습니다.");
+//		}
+//		
+//		return resultMap;
+//	}
 	
 	@PostMapping("/todo/create")
 	@ResponseBody
@@ -57,7 +75,6 @@ public class TodoController {
 		
 		int result = todoService.createTodo(dto);
 		if(result > 0) {
-			System.out.println("성공 테스트");
 			resultMap.put("res_code", "200");
 			resultMap.put("res_msg", "할 일이 추가되었습니다.");
 		}
@@ -76,7 +93,6 @@ public class TodoController {
 		int result = todoService.updateTodoOne(id);
 		
 		if(result > 0) {
-			System.out.println("체크박스 테스트 성공");
 			resultMap.put("res_code", "200");
 			resultMap.put("res_msg", "상태 변경 완료");
 		}

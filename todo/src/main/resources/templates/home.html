@@ -73,7 +73,6 @@
 			document.querySelectorAll('.finish-check').forEach(function(checkbox) {
 		        checkbox.addEventListener('change', function() {
 		            const todoNo = this.value;
-		            const isChecked = this.checked ? 'Y' : 'N';
 	
 		            fetch("/todo/update/"+todoNo, {
 		                method: 'post'
@@ -108,18 +107,38 @@
 					} 
 				})
 			})
+			
+			// 강사님 버전 할 일 추가
+			/* const todoCreateFrm = document.todo_form;
+			todoCreateFrm.addEventListener("submit",function(e){
+				e.preventDefault();
+				if(todoCreateFrm.content.value == '') {
+					alert('할 일 내용을 반드시 입력하세요.');
+				} else {
+					const payload = new FormData(todoCreateFrm);
+					fetch("/todo/create",{
+						method:'post',
+						body:payload
+					})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg);
+						if(data.res_code == '200') {
+							location.href = "/";
+						}
+					})
+				}
+			}) */
 		
 			// 할 일 추가 버튼 클릭 시
 			document.getElementById('createTodo').addEventListener('click',function(e){
 				const form = document.todo_form;
 				e.preventDefault();
-				console.log("클릭되나요?");
 				let valid = true;
 				let todo = document.getElementById('todo').value;
 				
 				if(!todo) {
 					valid = false;
-					console.log("값이 없는게 맞음?");
 				}
 				
 				if(valid == false) {

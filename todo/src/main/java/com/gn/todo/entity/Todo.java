@@ -23,6 +23,7 @@ public class Todo {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="no")
 	private Long no;
 	
 	@Column(name="content")

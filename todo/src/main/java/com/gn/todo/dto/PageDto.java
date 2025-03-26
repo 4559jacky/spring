@@ -10,9 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
-@ToString
-@Builder
 public class PageDto {
 	private int numPerPage = 5;
 	
