@@ -3,81 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <title>ToDo List</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffe6f0; /* 파스텔 핑크 배경 */
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1); /* 아주 약간의 입체감 */
+        }
+        .btn-gray {
+            background-color: #6c757d; /* 부트스트랩 회색 */
+            color: white;
+            border: none;
+        }
+        .btn-gray:hover {
+            background-color: #5a6268;
+        }
+        .list-group-item {
+            background-color: white;
+            border: 1px solid #dee2e6;
+        }
+    </style>
 </head>
-	<th:block>
-		<h1>할 일 목록</h1>
-		<form action="/todo" name="search_todo_form" method="get">
-			<div class="search">
-				<label>내용 : <input type="text" name="search_text"
-				th:value="${searchDto != null ? searchDto.search_text : ''}"></label>
-				<input type="submit" value="검색">
-			</div>
-		</form>
-		<br>
-		<table border="1">
-			<thead>
-				<tr>
-					<th>완료</th>
-					<th>번호</th>
-					<th>내용</th>
-					<th>삭제</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:if="${#lists.isEmpty(todoList)}">
-					<td colspan="4">조회된 데이터가 없습니다.</td>
-				</tr>
-				<tr th:if="${!#lists.isEmpty(todoList)}"
-					th:each="todo, todoStatus : ${todoList}">
-					<!-- <td>
-		                <input type="checkbox" th:checked="${todo.flag == 'Y'}"
-		                 th:value="${todo.no}" class="finish-check">
-		                완료
-		            </td> -->
-		            <td>
-		                <input type="checkbox"
-		                th:checked="${todo.flag == 'Y'}"
-		                th:value="${todo.flag}"
-		                th:onchange="|javascript:todoFlagUpdate('${todo.no}')|">
-		                완료
-		            </td>
-					<td th:text="${(pageDto.nowPage-1)*(pageDto.numPerPage)+todoStatus.count}">번호</td>
-					<td th:text="${todo.content}">내용</td>
-					<!-- <td><button type="button" th:value="${todo.no}" class="delete_btn">삭제</button></td> -->
-					<td><input type="button" value="삭제"
-						th:onclick="|javascript:todoDelete('${todo.no}')|"></td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="center">
-			<div class="pagination">
-				<th:block th:if="${pageDto.totalPage != 0}">
-					<a th:if="${pageDto.prev}"
-						 th:href="@{/todo(nowPage=${pageDto.pageBarStart-1},search_text=${searchDto.search_text})}">
-						 &laquo;
-					</a>
-					<a th:each="num : ${#numbers.sequence(pageDto.pageBarStart,pageDto.pageBarEnd)}"
-						th:text="|${num} |" class="page-link"
-						th:classappend="${pageDto.nowPage == num} ? 'active' "
-						th:href="@{/todo(nowPage=${num},search_text=${searchDto.search_text})}">
-						번호
-					</a>
-					<a th:if="${pageDto.next}"
-						th:href="@{/todo(nowPage=${pageDto.pageBarEnd+1},search_text=${searchDto.search_text})}">&raquo;</a>
-				</th:block>
-			</div>
-		</div>
-		
-		<br>
-		
-		
-		<h1>할 일 추가</h1>
-		<form name="todo_form">
-			<input type="text" name="content" id="todo" placeholder="할일을 입력하세요.">
-			<input type="hidden" name="flag" value="N">
-			<button type="button" id="createTodo">추가하기</button>
-		</form>
-		<script>
+<body>
+	
+    <div class="container">
+        <th:block>
+        	<h1 class="text-center">파일 목록</h1>
+			<form name="create_file_form">
+				<input type="file" name="files" multiple class="mb-3">
+				<input type="submit" value="업로드">
+			</form>
+			<script>
+				const fileForm = document.create_file_form;
+				fileForm.addEventListener('submit',function(e){
+					const payload = new FormData(fileForm);
+					fetch('/attach/create', {
+						method:'post',
+						body:payload
+					})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg)
+						if(data.res_code == '200') {
+							location.href = '/';
+						}
+					})
+				})
+			</script>
+            <h1 class="text-center">할 일 목록</h1>
+            <form action="/todo" name="search_todo_form" method="get" class="mb-3">
+                <div class="input-group">
+                    <input type="text" name="search_text" class="form-control"
+                        th:value="${searchDto != null ? searchDto.search_text : ''}" placeholder="내용 입력">
+                    <button class="btn btn-gray" type="submit">검색</button>
+                </div>
+            </form>
+            <table class="table table-bordered text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>완료</th>
+                        <th>번호</th>
+                        <th>내용</th>
+                        <th>삭제</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(todoList)}">
+                        <td colspan="4">조회된 데이터가 없습니다.</td>
+                    </tr>
+                    <tr th:if="${!#lists.isEmpty(todoList)}" th:each="todo, todoStatus : ${todoList}">
+                        <!-- <td>
+			                <input type="checkbox" th:checked="${todo.flag == 'Y'}"
+			                 th:value="${todo.no}" class="finish-check">
+			                완료
+		            	</td> -->
+                        <td>
+                            <input type="checkbox" th:checked="${todo.flag == 'Y'}"
+                                th:value="${todo.flag}"
+                                th:onchange="|javascript:todoFlagUpdate('${todo.no}')|">
+                        </td>
+                        <td th:text="${(pageDto.nowPage-1)*(pageDto.numPerPage)+todoStatus.count}">번호</td>
+                        <td th:text="${todo.content}">내용</td>
+                        <!-- <td><button type="button" th:value="${todo.no}" class="delete_btn">삭제</button></td> -->
+                        <td><button class="btn btn-gray btn-sm" th:onclick="|javascript:todoDelete('${todo.no}')|">삭제</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-center">
+                <div class="pagination">
+                    <th:block th:if="${pageDto.totalPage != 0}">
+                        <a class="btn btn-gray btn-sm" th:if="${pageDto.prev}"
+                            th:href="@{/todo(nowPage=${pageDto.pageBarStart-1},search_text=${searchDto.search_text})}">&laquo;</a>
+                        <a class="btn btn-gray btn-sm" th:each="num : ${#numbers.sequence(pageDto.pageBarStart,pageDto.pageBarEnd)}"
+                            th:text="|${num} |"
+                            th:classappend="${pageDto.nowPage == num} ? 'active' "
+                            th:href="@{/todo(nowPage=${num},search_text=${searchDto.search_text})}">번호</a>
+                        <a class="btn btn-gray btn-sm" th:if="${pageDto.next}"
+                            th:href="@{/todo(nowPage=${pageDto.pageBarEnd+1},search_text=${searchDto.search_text})}">&raquo;</a>
+                    </th:block>
+                </div>
+            </div>
+            <br>
+            <h1 class="text-center">할 일 추가</h1>
+            <form name="todo_form" class="d-flex">
+                <input type="text" name="content" id="todo" class="form-control me-2" placeholder="할 일을 입력하세요.">
+                <input type="hidden" name="flag" value="N">
+                <button type="button" id="createTodo" class="btn btn-gray">추가하기</button>
+            </form>
+			<script>
 			// 체크박스
 			/* document.querySelectorAll('.finish-check').forEach(function(checkbox) {
 		        checkbox.addEventListener('change', function() {
@@ -193,5 +232,8 @@
 				}
 			})
 		</script>
-	</th:block>
+        </th:block>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
