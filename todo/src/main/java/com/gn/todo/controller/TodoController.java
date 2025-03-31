@@ -1,12 +1,12 @@
 package com.gn.todo.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gn.todo.dto.PageDto;
 import com.gn.todo.dto.SearchDto;
 import com.gn.todo.dto.TodoDto;
+import com.gn.todo.entity.Attach;
 import com.gn.todo.entity.Todo;
+import com.gn.todo.service.AttachService;
 import com.gn.todo.service.TodoService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class TodoController {
 	
 	private final TodoService todoService;
+	private final AttachService attachService;
 	
 	@GetMapping({"","/","/todo"})
 	public String selectTodoAll(Model model, SearchDto searchDto, PageDto pageDto) {
@@ -34,6 +37,10 @@ public class TodoController {
 		if(searchDto.getSearch_text() == null) {
 			searchDto.setSearch_text("");
 		}
+		
+		List<Attach> attachList = attachService.selectAttachList();
+		model.addAttribute("attachList", attachList);
+		
 		
 		Page<Todo> resultList = todoService.selectTodoAll(searchDto, pageDto);
 		pageDto.setTotalPage(resultList.getTotalPages());
