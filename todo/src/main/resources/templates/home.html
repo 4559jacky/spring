@@ -52,7 +52,7 @@
 					<tr th:each="attach, attachStatus : ${attachList}">
 						<td th:text="${attachStatus.count}">번호</td>
 						<td>
-							<a th:onclick="|location.href='@{/download/{id}(id=${attach.attachNo})}'|"
+							<a th:onclick="|location.href='@{/s3/download/{id}(id=${attach.attachNo})}'|"
 								th:text="${attach.oriName}">
 								파일명
 							</a>
