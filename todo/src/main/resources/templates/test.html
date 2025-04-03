@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OfficeHi Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body { background-color: #f8f9fa; }
+        .dashboard-container { max-width: 1200px; margin: auto; }
+        .card { border-radius: 12px; }
+        .btn-primary { background-color: #0056b3; border: none; }
+        .btn-dark { background-color: #222; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">OfficeHi</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">전자 결재</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">근태 관리</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
+                </ul>
+                <a class="btn btn-outline-dark ms-3" href="#">로그아웃</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card p-3 text-center">
+                    <img src="https://via.placeholder.com/80" class="rounded-circle mx-auto" alt="profile">
+                    <h5 class="mt-2">엄다빈 대리</h5>
+                </div>
+                <div class="list-group mt-3">
+                    <a href="#" class="list-group-item">마이페이지</a>
+                    <a href="#" class="list-group-item">전자 결재</a>
+                    <a href="#" class="list-group-item">근태 관리</a>
+                    <a href="#" class="list-group-item">공지사항</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-3">
+                    <h5 class="mb-3">공지사항</h5>
+                    <p class="alert alert-info">오늘의 공지사항 - 편리하고 효율적인 그룹웨어 OfficeHi를 이용해 주세요!</p>
+                </div>
+                <div class="card p-3 mt-3">
+                    <h5>결재 현황</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">이승준 - 2023년 02월 12일 대금 결재 완료</li>
+                        <li class="list-group-item">엄다빈 - 2023년 02월 12일 대금 결재 완료</li>
+                        <li class="list-group-item">엄다빈 - 2023년 02월 12일 대금 결재 완료</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 text-center">
+                    <h5>근태 관리</h5>
+                    <h2 id="clock">15:43:46</h2>
+                    <button class="btn btn-primary w-100 my-1">출근</button>
+                    <button class="btn btn-dark w-100">퇴근</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white text-center py-3 mt-4 shadow-sm">
+        <p class="mb-0">&copy; OfficeHi, All rights reserved</p>
+    </footer>
+</body>
+</html>
